@@ -1,0 +1,51 @@
+﻿@model IEnumerable<NEWG.Models.Category>
+
+@{
+    ViewData["PageTitle"] = "Category";
+    ViewData["PageAction"] = "Add Category";
+    ViewData["PageUrl"] = "/Categories/AddOrEdit";
+}
+
+
+<div class="row">
+    <div class="col-md-7">
+        <ejs-grid id="categories" dataSource="@Model" allowSorting="true" allowPaging="true"  allowTextWrap="true">
+            <e-grid-pagesettings pagesize="10" ></e-grid-pagesettings>
+            <e-grid-columns >
+                
+                <e-grid-column headerText="Category" field="Name" width="300px"></e-grid-column>
+                <e-grid-column headerText="Description" field="Description"></e-grid-column>
+                <e-grid-column headerText="Actions" template="#ActionTemplate" width="100px"></e-grid-column>
+            </e-grid-columns>
+        </ejs-grid>
+    </div>
+
+            @*Widget *@
+    <div class="col-md-5">
+        <div class="widget h-100 d-flex justify-content-center align-items-center" style="background-color:#212b36">
+        <i class="fa-solid fa-shapes fa-2xl"></i>
+        </div>
+    </div>
+</div>
+               @*Edit icon*@
+    <script id="ActionTemplate" type="text/x-template">
+        <div class="d-flex flex-row justify-content-start">
+            <a class="btn btn-sm no-a-decoration" href="/Categories/AddOrEdit/${CategoryId}">
+                <i class="fa-solid fa-pen fa-lg"></i>
+            </a>
+
+               @*Delete icon *@
+            <form action="/Categories/Delete/${CategoryId}" method="post">
+                @Html.AntiForgeryToken()    @*Protect from bots or attacks  *@    
+            <button type="submit" class="btn btn-sm btn-link no-a-decoration"onclick="return confirm(&quot;Really?&quot;)">
+            <i class="fa-solid fa-trash-can fa-lg text-danger"></i>    
+            </button>
+            
+            </form>
+                </div>
+
+    </script>
+
+
+
+
