@@ -37,6 +37,9 @@ body {
     color:inherit;
 }
 
+.mainview{
+    margin-left:250px;
+}
 
 .e-bigger{
     font-size:x-large;
@@ -117,8 +120,16 @@ body {
     padding: 10px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    
 }
 
 .widerColumn{
     width:75%;
+}
+
+/*Sidepanel*/
+#sidepanel {
+    background-color: #1a222b;
+   border-right: 5px #808080;
+   padding: 20px 20px
 }
