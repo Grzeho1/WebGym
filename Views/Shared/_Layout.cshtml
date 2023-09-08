@@ -19,6 +19,8 @@
 </head>
 
 <body class="e-bigger">
+    <partial name="_SidePanel" />
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -37,44 +39,56 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
-                        </li>
+                        <li class="nav-item"> </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Exercises" asp-action="Index">Exercises</a>
+                        <li class="nav-item"> </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Workouts" asp-action="Index">Workouts</a>
+                        <li class="nav-item"> </li>
+                        
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
+    <div class="mainview">
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-10"></div>
             <main role="main" class="pb-3">
-                <div class="row" >
-                <div class="col-md-7">
-                    <div class="d-flex flex-column mb-5">
-                        <div class="d-flex mb-1">
-                            <div class="flex-grow-1">
-                                   <h3 class="fw-bold"> @ViewData["PageTitle"]</h3>
-                            </div>
-                            <div>
-                                @if (ViewData["PageAction"] != null)
-                                    {
-                                        <a class="btn btn-success" href="@ViewData["PageUrl"]">
-                                                 @ViewData["PageAction"] 
-                                        </a>
-                                    }
+                    @if (ViewData["isPanel"] == null)
+                    {
+                        <div class="row" >
 
+                            <div class="col-md-7">
+                                <div class="d-flex flex-column mb-5">
+                                    <div class="d-flex mb-1">
+                                        <div class="flex-grow-1">
+                                            <h3 class="fw-bold"> @ViewData["PageTitle"]</h3>
+                                        </div>
+                                        <div>
+                                            @if (ViewData["PageAction"] != null)
+                                            {
+                                                <a class="btn btn-success" href="@ViewData["PageUrl"]">
+                                                    @ViewData["PageAction"] 
+                                                </a>
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <ejs-breadcrumb id="breadcrumb"></ejs-breadcrumb>
+                                </div>
                             </div>
                         </div>
-                             <ejs-breadcrumb id="breadcrumb"></ejs-breadcrumb>
-                         </div>
-                     </div>
-                </div>
-                @RenderBody()
+                    }
+                    @RenderBody()
             </main>
         </div>
        
     </div>
-
+    </div>
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2023 - WebGym Made by Tomáš Řehák - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

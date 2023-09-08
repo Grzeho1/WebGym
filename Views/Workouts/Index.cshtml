@@ -1,21 +1,21 @@
-﻿@model IEnumerable<NEWG.Models.Exercise>
+﻿@model IEnumerable<NEWG.Models.Workout>
 
 @{
-    ViewData["PageTitle"] = "Exercise";
-    ViewData["PageAction"] = "Add exercise";
-    ViewData["PageUrl"] = "/Exercises/AddOrEdit";
+    ViewData["PageTitle"] = "Workout";
+    ViewData["PageAction"] = "Add Workout";
+    ViewData["PageUrl"] = "/Workouts/AddOrEdit";
 }
 
 <div class="row">
     <div class="col-md-7">
-        <ejs-grid id="Exercises" dataSource="@Model" allowSorting="true" allowPaging="true" allowTextWrap="true">
+        <ejs-grid id="Workouts" dataSource="@Model" allowSorting="true" allowPaging="true" allowTextWrap="true">
             <e-grid-pagesettings pagesize="10"></e-grid-pagesettings>
             <e-grid-columns>
-
-                <e-grid-column headerText="Name" field="Name" width="300px"></e-grid-column>
-                <e-grid-column headerText="Description" field="Description"></e-grid-column>
-                <e-grid-column headerText="Category" field="CategoryName"></e-grid-column>
-                <e-grid-column headerText="Edit/Delete" template="#ActionTemplate" width="120px" ></e-grid-column>
+                
+                <e-grid-column headerText="Date" field="Date" type="date" format="dd-MM-yy" textalign="Left" width="300px"></e-grid-column>
+                <e-grid-column headerText="Duration" field="Duration"></e-grid-column>
+                <e-grid-column headerText="Notes" field="Notes"></e-grid-column>
+                <e-grid-column headerText="Edit/Delete" template="#ActionTemplate" width="120px"></e-grid-column>
             </e-grid-columns>
         </ejs-grid>
     </div>
@@ -30,12 +30,12 @@
 @*Edit icon*@
 <script id="ActionTemplate" type="text/x-template">
     <div class="d-flex flex-row justify-content-start">
-        <a class="btn btn-sm no-a-decoration" href="/Exercises/AddOrEdit/${ExerciseId}">
+        <a class="btn btn-sm no-a-decoration" href="/Workouts/AddOrEdit/${WorkoutId}">
             <i class="fa-solid fa-pen fa-lg"></i>
         </a>
 
     @*Delete icon *@
-        <form action="/Exercises/Delete/${ExerciseId}" method="post">
+        <form action="/Workouts/Delete/${WorkoutId}" method="post">
     @Html.AntiForgeryToken()    @*Protect from bots or attacks  *@
         <button type="submit" class="btn btn-sm btn-link no-a-decoration"onclick="return confirm(&quot;Really?&quot;)">
         <i class="fa-solid fa-trash-can fa-lg text-danger"></i>
@@ -45,4 +45,3 @@
             </div>
 
 </script>
-
