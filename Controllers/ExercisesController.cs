@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NEWG.Models;
 using WebGym.Data;
+using Newtonsoft.Json;
 
 namespace WebGym.Controllers
 {
@@ -22,9 +26,8 @@ namespace WebGym.Controllers
         // GET: Exercises
         public async Task<IActionResult> Index()
         {
-              return _context.Exercises != null ? 
-                          View(await _context.Exercises.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Exercises'  is null.");
+            var applicationContext = _context.Exercises.Include(e => e.Category);
+            return View(await applicationContext.ToListAsync());
         }
 
         // GET: Exercises/Details/5
@@ -45,10 +48,18 @@ namespace WebGym.Controllers
             return View(exercise);
         }
 
-        // GET: Exercises/Create
-        public IActionResult AddOrEdit()
+        // GET: Exercises/AddOrEdit
+        public IActionResult AddOrEdit(int id=0)
         {
-            return View(new Exercise());
+
+                CategoryList();
+            if (id == 0)
+                return View(new Exercise());
+            else
+
+                return View(_context.Exercises.Find(id));
+           
+            
         }
 
         // POST: Exercises/Create
@@ -56,19 +67,32 @@ namespace WebGym.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddorEdit([Bind("ExerciseId,Name,Description,Category")] Exercise exercise)
+        public async Task<IActionResult> AddorEdit([Bind("ExerciseId,CategoryId,Name,Description")] Exercise exercise)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(exercise);
+                if (exercise.ExerciseId == 0 )
+                
+                    _context.Add(exercise);
+                
+                else
+                    _context.Update(exercise);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            CategoryList();
             return View(exercise);
         }
 
-      
-
+        //CategoryList 
+        [NonAction]
+        public void CategoryList()
+        {
+            var categoryList = _context.Categories.ToList();
+            Category category = new Category() { CategoryId = 0, Name = "Select" };
+            categoryList.Insert(0, category);
+            ViewBag.Category = categoryList;
+        }
       
 
         // POST: Exercises/Delete/5

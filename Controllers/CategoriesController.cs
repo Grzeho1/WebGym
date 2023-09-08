@@ -27,17 +27,19 @@ namespace WebGym.Controllers
                           Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
         }
 
-        
-        
+
+
 
         // GET: Categories/AddOrEdit
-        public IActionResult AddOrEdit(int id= 0)
+        public IActionResult AddOrEdit(int id = 0)
         {
-           if(id==0)
+            if (id == 0)
+            
                 return View(new Category());
+            
+            else 
 
-
-            return View(_context.Categories.Find (id));
+            return View(_context.Categories.Find(id));
         }
 
         // POST: Categories/Create
@@ -48,7 +50,7 @@ namespace WebGym.Controllers
         public async Task<IActionResult> AddOrEdit([Bind("CategoryId,Name,Description")] Category category)
         {
             if (ModelState.IsValid)
-            {
+            {   
                 if (category.CategoryId== 0) 
                 _context.Add(category);
                 else
@@ -56,7 +58,7 @@ namespace WebGym.Controllers
                     _context.Categories.Update(category);
                 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(AddOrEdit));
+                return RedirectToAction(nameof(Index));
             }
             return View(category);
         }
