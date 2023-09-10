@@ -1,0 +1,74 @@
+﻿@model IEnumerable<NEWG.Models.ExerciseRecord>
+
+@{
+    ViewData["PageTitle"] = "ExerciseRecords";
+    ViewData["PageAction"] = "Add Exercise";
+    ViewData["PageUrl"] = "/ExerciseRecords/Create";
+ }
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ExerciseId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkoutId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Repetitions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExecutionSpeed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Notes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Exercise)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Workout)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkoutId)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Repetitions)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExecutionSpeed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Exercise.Name)
+            </td>
+            
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ExerciseRecordId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ExerciseRecordId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ExerciseRecordId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

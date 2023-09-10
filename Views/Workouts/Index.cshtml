@@ -4,14 +4,16 @@
     ViewData["PageTitle"] = "Workout";
     ViewData["PageAction"] = "Add Workout";
     ViewData["PageUrl"] = "/Workouts/AddOrEdit";
+    
 }
 
 <div class="row">
     <div class="col-md-7">
+       
         <ejs-grid id="Workouts" dataSource="@Model" allowSorting="true" allowPaging="true" allowTextWrap="true">
-            <e-grid-pagesettings pagesize="10"></e-grid-pagesettings>
+      <e-grid-pagesettings pagesize="10"></e-grid-pagesettings>
+            
             <e-grid-columns>
-                
                 <e-grid-column headerText="Date" field="Date" type="date" format="dd-MM-yy" textalign="Left" width="300px"></e-grid-column>
                 <e-grid-column headerText="Duration" field="Duration"></e-grid-column>
                 <e-grid-column headerText="Notes" field="Notes"></e-grid-column>
@@ -26,22 +28,34 @@
             <i class="fa-solid fa-shapes fa-2xl"></i>
         </div>
     </div>
+
+
 </div>
+
+
 @*Edit icon*@
 <script id="ActionTemplate" type="text/x-template">
-    <div class="d-flex flex-row justify-content-start">
-        <a class="btn btn-sm no-a-decoration" href="/Workouts/AddOrEdit/${WorkoutId}">
-            <i class="fa-solid fa-pen fa-lg"></i>
-        </a>
+        <div class="d-flex flex-row justify-content-start">
+            <a class="btn btn-sm no-a-decoration" href="/Workouts/AddOrEdit/${WorkoutId}">
+                <i class="fa-solid fa-pen fa-lg"></i>
+            </a>
 
     @*Delete icon *@
         <form action="/Workouts/Delete/${WorkoutId}" method="post">
     @Html.AntiForgeryToken()    @*Protect from bots or attacks  *@
-        <button type="submit" class="btn btn-sm btn-link no-a-decoration"onclick="return confirm(&quot;Really?&quot;)">
-        <i class="fa-solid fa-trash-can fa-lg text-danger"></i>
-        </button>
+            <button type="submit" class="btn btn-sm btn-link no-a-decoration"onclick="return confirm(&quot;Really?&quot;)">
+            <i class="fa-solid fa-trash-can fa-lg text-danger"></i>
+            </button>
+         </form>
 
-        </form>
-            </div>
+         <a class="btn btn-sm no-a-decoration" href="/ExerciseRecords/Create?workoutId=${WorkoutId}">
+                <i class="fa-solid <i class="bi bi-plus-circle-fill"></i> fa-lg"></i>
+            </a>
+
+       
+         
+     </div>
 
 </script>
+
+

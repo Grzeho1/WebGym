@@ -8,7 +8,7 @@ namespace NEWG.Models
     {
         [Key]
         public int WorkoutId { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal Duration { get; set; }

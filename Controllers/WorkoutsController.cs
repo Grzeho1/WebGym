@@ -22,7 +22,8 @@ namespace WebGym.Controllers
         // GET: Workouts
         public async Task<IActionResult> Index()
         {
-              return _context.Workouts != null ? 
+           
+            return _context.Workouts != null ? 
                           View(await _context.Workouts.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Workouts'  is null.");
         }
@@ -66,12 +67,10 @@ namespace WebGym.Controllers
             if (ModelState.IsValid)
             {
                 if (workout.WorkoutId == 0)
-
                     _context.Add(workout);
-
                 else
                     _context.Workouts.Update(workout);
-                await _context.SaveChangesAsync();      
+                  await _context.SaveChangesAsync();      
                 return RedirectToAction(nameof(Index));
             }
             
@@ -120,5 +119,11 @@ namespace WebGym.Controllers
         {
           return (_context.Workouts?.Any(e => e.WorkoutId == id)).GetValueOrDefault();
         }
+
+
+        
+
+        
+
     }
 }

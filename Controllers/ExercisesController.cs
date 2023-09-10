@@ -62,7 +62,7 @@ namespace WebGym.Controllers
             
         }
 
-        // POST: Exercises/Create
+        // POST: Exercises/AddOrEdit
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -72,9 +72,7 @@ namespace WebGym.Controllers
             if (ModelState.IsValid)
             {
                 if (exercise.ExerciseId == 0 )
-                
                     _context.Add(exercise);
-                
                 else
                     _context.Update(exercise);
                 await _context.SaveChangesAsync();
