@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using Newtonsoft.Json;
 namespace NEWG.Models
 {
     public class Workout
@@ -15,6 +15,7 @@ namespace NEWG.Models
         public string? Notes { get; set; }
 
         // Vytvoření vztahu mezi Workouts a ExerciseRecords
+        [JsonIgnore]
         public ICollection<ExerciseRecord> ?ExerciseRecords { get; set; }
         public List<Exercise> ?Exercises { get; set; }
     }

@@ -59,11 +59,11 @@
             </div>
         </nav>
     </header>
-    <div class="mainview">
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="@(ViewData["isPanel"] == null?"col-md-10":"col-md-7")">
-            <main role="main" class="pb-3">
+    <div class="main-content">
+    <div class="container mt-7">
+            <div class="row justify-content-center">
+            <div class="@(ViewData["isPanel"] == null?"col-md-10":"col-md-12")">
+            <main role="main" class="pb-5">
                     @if (ViewData["isPanel"] == null)
                     {
                         <div class="row" >
