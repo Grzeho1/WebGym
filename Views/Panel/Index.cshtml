@@ -4,3 +4,64 @@
 @{
     ViewData["isPanel"]=true;
 }
+
+
+<div class="row mb-8">
+    <div class="col-md-4">
+        <div class="d-flex flex-row widget TotalWeight">
+            <div class="d-flex flex-column justify-content-center p-5">
+                <i class="bi bi-ev-station-fill"></i>
+            </div>
+            <div class="d-flex flex-column m-auto py-3">
+                <span class="lead">Weight lifted 7 days</span>
+                <h1 class="display-6 fw-bold">@ViewBag.TotalWeight kg</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="d-flex flex-row widget TotalWeight">
+            <div class="d-flex flex-column justify-content-center p-5">
+                <i class="bi bi-7-square"></i>
+            </div>
+            <div class="d-flex flex-column m-auto py-3">
+                <span class="lead">Days lifted 7 days</span>
+                <h1 class="display-6 fw-bold">@ViewBag.daysLifted</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="d-flex flex-row widget TotalWeight">
+            <div class="d-flex flex-column justify-content-center p-5">
+                <i class="bi bi-calendar-day-fill"></i>
+            </div>
+            <div class="d-flex flex-column m-auto py-3">
+                <span class="lead">Weight lifted 7 days</span>
+                <h1 class="display-6 fw-bold">@ViewBag.TotalWeight kg</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    @* Charts*@
+
+   <div class="row mb-4">
+    <div class="col-mb-4">
+        <div class=" widget Chart"> 
+            <div class="p-4">
+                <h5 class="fw-bold"> Neco</h5>
+            </div>
+            <ejs-accumulationchart id="donut" background="#1a222b">
+                <e-accumulation-series-collection>
+                    <e-accumulation-series datasource="@ViewBag.categoryCounts" xName="CategoryName" yName="CategoryCount">
+
+                    </e-accumulation-series>
+                </e-accumulation-series-collection>
+            </ejs-accumulationchart>
+        </div>
+        <div class="col-mb-8">
+        </div>
+    </div>
+   </div>
