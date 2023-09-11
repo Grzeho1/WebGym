@@ -2,73 +2,49 @@
 
 @{
     ViewData["PageTitle"] = "ExerciseRecords";
-    ViewData["PageAction"] = "Add Exercise";
+   
     ViewData["PageUrl"] = "/ExerciseRecords/Create";
  }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ExerciseId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkoutId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Repetitions)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weight)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ExecutionSpeed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Notes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Exercise)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Workout)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.WorkoutId)
-                </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Repetitions)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Weight)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExecutionSpeed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Notes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Exercise.Name)
-            </td>
+
+<div class="row">
+    <div class="col-md-10">
+       
+        <ejs-grid id="ExerciseRecord" dataSource="@Model" allowSorting="true" allowPaging="true" allowTextWrap="true">
+            <e-grid-selectionsettings type="Single" persistSelection="true"></e-grid-selectionsettings>
+      <e-grid-pagesettings pagesize="10"></e-grid-pagesettings>
             
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ExerciseRecordId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ExerciseRecordId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ExerciseRecordId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+            <e-grid-columns>
+                <e-grid-column headerText="ExerciseId" field="ExerciseId"  textalign="Left" width="100px"></e-grid-column>
+                <e-grid-column headerText="WorkoutId" field="WorkoutId" ></e-grid-column>
+                <e-grid-column headerText="Repetitions" field="Repetitions"></e-grid-column>
+                <e-grid-column headerText="Weight" field="Weight"></e-grid-column>
+                <e-grid-column headerText="ExecutionSpeed" field="ExecutionSpeed"></e-grid-column>
+                
+              <e-grid-column headerText="Edit/Delete" template="#ActionTemplate" ></e-grid-column>
+            </e-grid-columns>
+        </ejs-grid>
+    </div>
+    </div>
+
+
+
+@*Edit icon*@
+<script id="ActionTemplate" type="text/x-template">
+    <div class="d-flex flex-row justify-content-start">
+        <a class="btn btn-sm no-a-decoration" href="/ExerciseRecords/Edit/${CategoryId}">
+            <i class="fa-solid fa-pen fa-lg"></i>
+        </a>
+
+    @*Delete icon *@
+        <form action="/ExerciseRecords/Delete/${CategoryId}" method="post">
+    @Html.AntiForgeryToken()    @*Protect from bots or attacks  *@
+        <button type="submit" class="btn btn-sm btn-link no-a-decoration"onclick="return confirm(&quot;Really?&quot;)">
+        <i class="fa-solid fa-trash-can fa-lg text-danger"></i>
+        </button>
+
+        </form>
+            </div>
+
+</script>

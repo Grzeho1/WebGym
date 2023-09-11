@@ -14,7 +14,7 @@ namespace NEWG.Models
         public Workout? Workout { get; set; }
         public int Repetitions { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal? Weight { get; set; }
+        public int? Weight { get; set; }
         public string? ExecutionSpeed { get; set; }
         public string? Notes { get; set; }
 
