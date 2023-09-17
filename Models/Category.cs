@@ -10,7 +10,7 @@ namespace NEWG.Models
         public string Name { get; set; }
         public string? Description { get; set; }
 
-        // Vytvoření vztahu mezi Category a Exercises
+        // Relation Category-Exercises
         public ICollection<Exercise>? Exercises { get; set; }
     }
 }
