@@ -14,21 +14,28 @@ namespace WebGym.Controllers
         {
             _context = context;
         }
-        // Total workouts Last 7 days
+             // Summary of 7 days 
+
         public async Task<ActionResult> Index()
         {
-            DateTime startD7 = DateTime.Today.AddDays(-6);
-            DateTime startD30 = DateTime.Today.AddDays(-30);
+            DateTime startD7 = DateTime.Today.AddDays(-6);  // last 7 Days
+            DateTime startD30 = DateTime.Today.AddDays(-30);  // Last 30 Days
             DateTime EndD = DateTime.Today;
+
+            //List of Workouts ïn last 7 days
 
             List<Workout> Workouts = await _context.Workouts
                 .Include(w => w.ExerciseRecords)
                 .Where(y => y.Date >= startD7 && y.Date <= EndD).ToListAsync();
 
+            //Total Weight lifted 
+
             int totalWeightLifted = Workouts
                   .SelectMany(w => w.ExerciseRecords)
                   .Sum(rw => rw.Weight ?? 0);
             ViewBag.TotalWeight = totalWeightLifted;
+
+            // Total days lifted
 
             int daysLifted = Workouts
                 .Select(w => w.Date.Date)
@@ -37,35 +44,31 @@ namespace WebGym.Controllers
             ViewBag.DaysLifted = daysLifted;
 
 
+
+            //Donut Chart control
+
+            #region
             ViewBag.categoryCounts = _context.exerciseRecords
-        .Include(er => er.Exercise) // Načtení vazby na Exercise
-        .Where(er => er.Exercise != null) // Filtrujte pouze záznamy s existujícím Exercise
-        .GroupBy(er => er.Exercise.CategoryId) // Zgrupujte podle CategoryId
-        .Select(g => new
-        {
-            CategoryId = g.Key,
-            CategoryCount = g.Count(),
-            CategoryName = g.First().Exercise.Name
-        })
-        .ToList();
-
-            foreach (var categoryCount in ViewBag.categoryCounts)
+            .Include(er => er.Exercise) 
+            .Where(er => er.Exercise != null) // Only existing exercises
+            .GroupBy(er => er.Exercise.CategoryId) // Group by CategotyId
+            .Select(g => new
             {
-                var category = _context.Categories.Find(categoryCount.CategoryId); // Načtení kategorie pro získání názvu
+                CategoryId = g.Key,
+                CategoryCount = g.Count(),
+                CategoryName = g.First().Exercise.Name
+            })
+            .ToList();
+
+                foreach (var categoryCount in ViewBag.categoryCounts)
+                {
+                    var category = _context.Categories.Find(categoryCount.CategoryId); // Load Category for name
                 
-            }
+                }
 
+               return View();
 
-
-
-            //DONAT
-
-
-
-
-
-
-            return View();
+            #endregion
         }
     }
 }

@@ -24,6 +24,7 @@ namespace WebGym.Controllers
         }
 
         // GET: Exercises
+
         public async Task<IActionResult> Index()
         {
             var applicationContext = _context.Exercises.Include(e => e.Category);
@@ -31,6 +32,7 @@ namespace WebGym.Controllers
         }
 
         // GET: Exercises/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Exercises == null)
@@ -49,6 +51,7 @@ namespace WebGym.Controllers
         }
 
         // GET: Exercises/AddOrEdit
+
         public IActionResult AddOrEdit(int id=0)
         {
 
@@ -82,7 +85,8 @@ namespace WebGym.Controllers
             return View(exercise);
         }
 
-        //CategoryList 
+        //CategoryList to ViewBag
+
         [NonAction]
         public void CategoryList()
         {
@@ -93,7 +97,8 @@ namespace WebGym.Controllers
         }
       
 
-        // POST: Exercises/Delete/5
+        // POST: Exercises/Delete
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
