@@ -39,7 +39,7 @@
 
     @*Delete icon *@
         <form action="/ExerciseRecords/Delete/${CategoryId}" method="post">
-    @Html.AntiForgeryToken()    @*Protect from bots or attacks  *@
+         @Html.AntiForgeryToken()    @*Protect from bots or attacks  *@
         <button type="submit" class="btn btn-sm btn-link no-a-decoration"onclick="return confirm(&quot;Really?&quot;)">
         <i class="fa-solid fa-trash-can fa-lg text-danger"></i>
         </button>
