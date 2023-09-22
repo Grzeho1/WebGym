@@ -12,12 +12,29 @@ namespace NEWG.Models
         public Exercise? Exercise { get; set; }
         public int WorkoutId { get; set; }
         public Workout? Workout { get; set; }
-        public int Repetitions { get; set; }
+        public int? Repetitions { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
-        public int? Weight { get; set; }
+        public decimal? Weight { get; set; }
         public string? ExecutionSpeed { get; set; }
         public string? Notes { get; set; }
 
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal? TotalWeight
+        {
+            get
+            {
+                if (Weight.HasValue && Repetitions > 0)
+                {
+                    return Weight.Value * Repetitions;
+
+                }
+                else
+                {
+                    return 0m;
+                }
+            }
+            private set { }
+        }
     }
        
 }

@@ -32,10 +32,16 @@ body {
     height: 92vh;
 }
 
+.border-bottom-green
+{
+    border-bottom:double;
+    border-bottom-color:greenyellow;
+}
+
 /*Button*/
-.btn:focus,.btn:active{
-    outline:none !important;
-    box-shadow:none;
+.btn:focus, .btn:active {
+    outline: none !important;
+    box-shadow: none;
 }
 .no-a-decoration,.no-a-decoration:hover{
     text-decoration:none;
@@ -184,3 +190,46 @@ body {
     }
     
 
+
+  /*SidePanel*/
+
+#menu {
+    width: 100% !important;
+    background-color: #1a222b;
+    overflow: hidden;
+    text-align: left;
+    padding:100px 20px 
+}
+    
+
+    #menu .e-menu-item
+    {
+        box-sizing: border-box;
+        width:200px;
+        background:inherit;
+        font-size:larger;
+        margin-bottom:20px;
+    }
+
+        #menu .e-menu-item a 
+        {
+            width: 50%;
+            color: greenyellow;
+            font-weight: 300;
+            
+            box-sizing: border-box;
+            
+        }
+
+        #menu .e-menu-item.e-separator {
+            border: none;
+            margin: 5px 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 19px;
+            color: #65da41;
+           
+        }
+        #menu .e-menu-item .e-anchor-wrap span.e-menu-icon {
+            color: rgb(73, 138, 0);
+        }

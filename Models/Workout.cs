@@ -14,7 +14,7 @@ namespace NEWG.Models
         public decimal Duration { get; set; }
         public string? Notes { get; set; }
 
-        // Vytvoření vztahu mezi Workouts a ExerciseRecords
+        // Relation 
         [JsonIgnore]
         public ICollection<ExerciseRecord> ?ExerciseRecords { get; set; }
         public List<Exercise> ?Exercises { get; set; }
