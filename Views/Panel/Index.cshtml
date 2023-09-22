@@ -8,6 +8,8 @@
     @*Main content widget *@
 
 <div class="row mb-8">
+
+    
     <div class="col-md-4">
         <div class="d-flex flex-row widget TotalWeight">
             <div class="d-flex flex-column justify-content-center p-5">
@@ -38,47 +40,24 @@
                 <i class="bi bi-calendar-day-fill"></i>
             </div>
             <div class="d-flex flex-column m-auto py-3">
-                <span class="lead">Weight lifted 7 days</span>
-                <h1 class="display-6 fw-bold">@ViewBag.TotalWeight kg</h1>
+                <span class="lead">Weight lifted today</span>
+                <h1 class="display-6 fw-bold">@ViewBag.LiftedToday kg</h1>
             </div>
         </div>
     </div>
 </div>
 
+
+
 <br />
 <br />
 
-    @* Charts*@
- 
-   @*<div class="row-mb-4">
-    <div class="col-mb-4">
-        <div class="widget chart">
-            <div class="p-4">
-                <h5 class="fw-bold"> Neco</h5>
-            </div>
-            <ejs-accumulationchart id="donut" background="#1a222b">
-                <e-accumulation-series-collection>
-                    <e-accumulation-series datasource="@ViewBag.categoryCounts" xName="CategoryName" yName="CategoryCount">
-
-                    </e-accumulation-series>
-                </e-accumulation-series-collection>
-            </ejs-accumulationchart>
-        </div>
-    </div>
-    <div class="col-md-8">
-        <div class="widget chart">
-            <div class="p-4">
-                <h5 class="fw-bold"> rrr</h5>
-            </div>
-           <ejs-chart id="spline">
-
-           </ejs-chart>
-        </div>
-    </div>
-   </div>
-   *@
+   
 <div class="row mb-4">
-    <div class="col-md-4">
+
+    @* Donut Chart*@
+
+    <div class="col-md-3 ">
         <div class="widget chart">
             <div class="p-4">
                 <h5 class="fw-bold">By Category</h5>
@@ -91,7 +70,7 @@
                         
                     </e-accumulation-series>
                 </e-accumulation-series-collection>
-                <e-accumulationchart-legendsettings position="Top" toggleVisibility="false">
+                <e-accumulationchart-legendsettings position="Top" toggleVisibility="true">
                     <e-legendsettings-textstyle color="#fff" size="1rem"></e-legendsettings-textstyle>
                 </e-accumulationchart-legendsettings>
                 <e-accumulationchart-tooltipsettings enable></e-accumulationchart-tooltipsettings>
@@ -99,12 +78,12 @@
         </div>
     </div>
 
+    @*Line chart *@
 
-
-    <div class="col-md-8">
+    <div class="col-md-5 ">
         <div class="widget chart">
             <div class="p-4">
-                <h5 class="fw-bold">Graf for ???</h5>
+                <h5 class="fw-bold">Weight Last 30 days</h5>
             </div>
             <ejs-chart id="spline-chart" background="#1a222b"
                        palettes=@(new string[]{"#54ffa9","#ffe91a"})>
@@ -121,10 +100,9 @@
                     <e-chartarea-border width="0"></e-chartarea-border>
                 </e-chart-chartarea>
                 <e-series-collection>
-                    <e-series dataSource="@ViewBag.categoryCounts" xName="CategoryCount" width="3"
-                              yName="CategoryName" name="Days" type="@Syncfusion.EJ2.Charts.ChartSeriesType.Spline"></e-series>
-                    <e-series dataSource="@ViewBag.categoryCounts" xName="day" width="3"
-                              yName="expense" name="Days" type="@Syncfusion.EJ2.Charts.ChartSeriesType.Spline"></e-series>
+                    <e-series dataSource="@ViewBag.LineData" xName="day" width="3"
+                              yName="totalWeightByDay" name="Weight" type="@Syncfusion.EJ2.Charts.ChartSeriesType.Spline" splineType="@Syncfusion.EJ2.Charts.SplineType.Monotonic"></e-series>
+                    
                 </e-series-collection>
                 <e-chart-legendsettings position="Top" alignment="Far" toggleVisibility="false">
                     <e-legendsettings-textstyle color="#fff" size="1rem"></e-legendsettings-textstyle>
@@ -133,4 +111,104 @@
             </ejs-chart>
         </div>
     </div>
+
+    @* Column Chart*@
+
+    <div class="col-md-4">
+        <div class="widget chart">
+            <div class="p-4">
+                <h5 class="fw-bold">Average by category</h5>
+            </div>
+            <ejs-chart id="container" width="100%" palettes="@(new string[]{"#54ffa9","#ffe91a"})">
+                <e-chart-primaryxaxis valueType="Category"></e-chart-primaryxaxis>
+                <e-series-collection>
+                    <e-series dataSource="@ViewBag.CategoryAverages" xName="CategoryName" opacity="0.5" yName="AverageWeight" EnableTooltip="true"
+                              type="@Syncfusion.EJ2.Charts.ChartSeriesType.Column">
+                        <e-series-marker>
+                            <e-series-datalabel visible="true" position="Top">
+                                <e-font fontWeight="200"  color="greenyellow" ></e-font>
+                            </e-series-datalabel>
+                        </e-series-marker>
+                              
+                    </e-series>
+                </e-series-collection>
+            </ejs-chart>
+        </div>
+    </div>
 </div>
+
+
+
+
+@* Drag and Drop*@
+
+@*<script>
+
+    var draggedElement = null;
+    var items;
+
+    function handleDragStart(e) {
+        this.style.opacity = "0.4";
+        draggedElement = this;
+
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("item", this.innerHTML);
+    }
+
+    function handleDragOver(e) {
+        if (e.preventDefault)
+            e.preventDefault();
+
+        e.dataTransfer.dropEffect = "move";
+        return false;
+    }
+
+    function handleDragEnter(e) {
+        this.classList.add("dragover");
+    }
+
+    function handleDragLeave(e) {
+        this.classList.remove("dragover");
+    }
+
+    function handleDrop(e) {
+        if (e.stopPropagation)
+            e.stopPropagation();
+
+        if (draggedElement != this) {
+            draggedElement.innerHTML = this.innerHTML;
+            draggedElement.setAttribute("data-item", this.innerHTML);
+
+            let replacedItem = e.dataTransfer.getData("item");
+            this.innerHTML = replacedItem;
+            this.setAttribute("data-item", replacedItem);
+        }
+
+        return false;
+    }
+
+    function handleDragEnd(e) {
+        this.style.opacity = "1";
+
+        items.forEach(function (item) {
+            item.classList.remove("dragover");
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", event => {
+        items = document.querySelectorAll(".widget");
+
+        items.forEach(function (item) {
+            item.addEventListener("dragstart", handleDragStart);
+            item.addEventListener("dragenter", handleDragEnter);
+            item.addEventListener("dragover", handleDragOver);
+            item.addEventListener("dragleave", handleDragLeave);
+            item.addEventListener("drop", handleDrop);
+            item.addEventListener("dragend", handleDragEnd);
+        });
+    });
+
+</script>
+*@
+
+       
