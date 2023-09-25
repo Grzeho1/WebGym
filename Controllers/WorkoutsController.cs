@@ -7,25 +7,47 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NEWG.Models;
 using WebGym.Data;
+using Microsoft.IdentityModel;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebGym.Controllers
 {
     public class WorkoutsController : Controller
+         
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser>? _userManager;
+       
 
-        public WorkoutsController(ApplicationDbContext context)
+        public WorkoutsController(UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
             _context = context;
+            _userManager = userManager;
+            
+
         }
 
         // GET: Workouts
         public async Task<IActionResult> Index()
         {
-           
-            return _context.Workouts != null ? 
-                          View(await _context.Workouts.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Workouts'  is null.");
+            // Show only records where UserId match loged User
+            var loggedUser = await _userManager.GetUserAsync(User);
+
+            if (loggedUser != null)
+            {
+                var workouts = await _context.Workouts
+                    .Where(e => e.User.Id == loggedUser.Id)
+                    .ToListAsync();
+                return View(workouts);
+            }
+
+            // Or return blank grid
+
+            else
+            {
+                return View();
+            }
+            
         }
 
         // GET: Workouts/Details/5
@@ -62,16 +84,25 @@ namespace WebGym.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit([Bind("WorkoutId,Date,Duration,Notes")] Workout workout)
+        public async Task<IActionResult> AddOrEdit([Bind("WorkoutId,GymUserId,Date,Duration,Notes")] Workout workout)
         {
             if (ModelState.IsValid)
             {
                 if (workout.WorkoutId == 0)
+                {
+                    var loggedUser = await _userManager.GetUserAsync(User);
+                    workout.GymUserId = loggedUser.Id;
+                    workout.User = loggedUser;
                     _context.Add(workout);
+                }
+
                 else
+                {
                     _context.Workouts.Update(workout);
-                  await _context.SaveChangesAsync();      
-                return RedirectToAction(nameof(Index));
+                }
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                
             }
             
             return View(workout);

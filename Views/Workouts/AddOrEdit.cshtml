@@ -12,6 +12,8 @@
         <form asp-action="AddOrEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" name="WorkoutId" value="@Model.WorkoutId" />
+                <input type="hidden" name="UserId" value="@Model.GymUserId" />
+                
             <div class="form-group">
                 <ejs-datepicker id="datepicker" format="MMM-dd-yy" type="date" ejs-for="Date" placeholder="Date" floatLabelType="Always"></ejs-datepicker>
                 <span asp-validation-for="Date" class="text-danger"></span>

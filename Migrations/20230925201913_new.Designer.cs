@@ -9,11 +9,11 @@ using WebGym.Data;
 
 #nullable disable
 
-namespace WebGym.Data.Migrations
+namespace WebGym.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230906224037_tri")]
-    partial class tri
+    [Migration("20230925201913_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -294,8 +294,11 @@ namespace WebGym.Data.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Repetitions")
+                    b.Property<int?>("Repetitions")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("TotalWeight")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal?>("Weight")
                         .HasColumnType("decimal(18, 2)");
@@ -323,13 +326,22 @@ namespace WebGym.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Duration")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("GymUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("WorkoutId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Workouts");
                 });
@@ -417,6 +429,15 @@ namespace WebGym.Data.Migrations
                     b.Navigation("Exercise");
 
                     b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("NEWG.Models.Workout", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NEWG.Models.Category", b =>

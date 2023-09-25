@@ -104,7 +104,7 @@ namespace WebGym.Controllers
             }).ToList();
 
 
-            // Array for 30 days
+            // Array for 30 days. For data day by day
             string[] last30d = Enumerable.Range(0, 30)
                 .Select(i => startD30.AddDays(i).ToString("dd-MMM"))
                 .ToArray();

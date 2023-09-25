@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebGym.Data;
 
 #nullable disable
 
-namespace WebGym.Data.Migrations
+namespace WebGym.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230907232141_test")]
-    partial class test
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -294,8 +291,11 @@ namespace WebGym.Data.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Repetitions")
+                    b.Property<int?>("Repetitions")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("TotalWeight")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal?>("Weight")
                         .HasColumnType("decimal(18, 2)");
@@ -326,10 +326,19 @@ namespace WebGym.Data.Migrations
                     b.Property<decimal>("Duration")
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<string>("GymUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("WorkoutId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Workouts");
                 });
@@ -417,6 +426,15 @@ namespace WebGym.Data.Migrations
                     b.Navigation("Exercise");
 
                     b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("NEWG.Models.Workout", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NEWG.Models.Category", b =>
