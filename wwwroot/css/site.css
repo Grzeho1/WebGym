@@ -145,14 +145,25 @@ body {
 /*Sidepanel*/
 #sidepanel {
     background-color: #1a222b;
-   border-right: 5px #808080;
-   padding: 20px 20px;
+    border-right: 5px;
+    padding: 20px 20px;
+   
 }
+    #sidepanel::before
+    {
+
+    }
+       
 
 .TotalWeight {
     font-weight:bold;
     color:greenyellow;
 
+}
+
+#sidepanel:hover
+{
+ 
 }
 
 /* Widget*/
@@ -198,38 +209,59 @@ body {
     background-color: #1a222b;
     overflow: hidden;
     text-align: left;
-    padding:100px 20px 
-}
+    padding: 100px 20px;
     
+}
 
-    #menu .e-menu-item
-    {
+
+
+    #menu .e-menu-item {
         box-sizing: border-box;
-        width:200px;
-        background:inherit;
-        font-size:larger;
-        margin-bottom:20px;
+        width: 200px;
+        background: #1a222b;
+        font-size: x-large;
+        margin-bottom: 20px;
     }
 
-        #menu .e-menu-item a 
-        {
+    #menu .e-menu-item:hover
+    {
+        border-left:double;
+        border-left-color:greenyellow;
+    }
+        
+
+        #menu .e-menu-item a {
             width: 50%;
             color: greenyellow;
-            font-weight: 300;
+            font-weight: 200;
             
-            box-sizing: border-box;
             
         }
+.e-menu-wrapper.e-menu-popup{
+    background-color:transparent;
+    
+}
 
-        #menu .e-menu-item.e-separator {
-            border: none;
-            margin: 5px 5px;
-            text-transform: uppercase;
-            font-weight: bold;
-            font-size: 19px;
-            color: #65da41;
-           
-        }
+.e-menu-wrapper {
+    
+}
+
+.e-menu-wrapper.e-menu-popup .e-menu-item {
+   
+    
+}
+
+
+
+#menu .e-menu-item.e-separator {
+    border: none;
+    margin: 5px 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 23px;
+    color: #65da41;
+    padding-bottom: 15px;
+}
         #menu .e-menu-item .e-anchor-wrap span.e-menu-icon {
             color: rgb(73, 138, 0);
         }

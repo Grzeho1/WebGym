@@ -21,9 +21,17 @@ namespace WebGym.Controllers
             DateTime startD7 = DateTime.Today.AddDays(-6);  // last 7 Days
             DateTime startD30 = DateTime.Today.AddDays(-30);  // Last 30 Days
             DateTime EndD = DateTime.Today;
+         
+            // Workouts ViewBag data
+            #region
+            //All workouts
+
+            List<Workout> AllWorkouts = await _context.Workouts
+                .Include(w => w.ExerciseRecords)
+                .ToListAsync();
+
             //Sum 7days
             //List of Workouts ïn last 7 days
-            #region
             List<Workout> Workouts = await _context.Workouts
                 .Include(w => w.ExerciseRecords)
                 .Where(y => y.Date >= startD7 && y.Date <= EndD).ToListAsync();

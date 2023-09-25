@@ -22,11 +22,22 @@ namespace WebGym.Controllers
         // GET: Workouts
         public async Task<IActionResult> Index()
         {
-           
-            return _context.Workouts != null ? 
-                          View(await _context.Workouts.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Workouts'  is null.");
+            ViewBag.WorkoutData = await _context.Workouts
+                .OrderByDescending(x => x.Date) 
+                .ToListAsync();
+
+
+            ViewBag.WorkoutExercises = await _context.Workouts
+                .Include(x => x.ExerciseRecords)
+                .ToListAsync();
+
+
+            return View();
+
+         
         }
+
+       
 
         // GET: Workouts/Details/5
         public async Task<IActionResult> Details(int? id)
