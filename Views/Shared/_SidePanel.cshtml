@@ -1,70 +1,85 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+
 @{
+
+
     List<Object> menuItems = new List<Object>();
 
-    menuItems.Add(new
+    if(User.Identity.IsAuthenticated)
     {
-        text = "General",
-        separator = true,
-    });
-    menuItems.Add(new
-    {
-        text = "Dashboard",
-        url = "/",
-        iconCss = "fa-solid fa-box",
-    });
-    menuItems.Add(new
-    {
-        text = "Category",
-        items = new List<object>()
+        menuItems.Add(new
+        {
+            text = "General",
+            separator = true,
+        });
+        menuItems.Add(new
+        {
+            text = "Dashboard",
+            url = "/",
+            iconCss = "fa-solid fa-box",
+        });
+        menuItems.Add(new
+        {
+            text = "Category",
+            items = new List<object>()
         {
             new { text = "Add", url = "/Categories/AddOrEdit", },
             new { text = "List", url = "/Categories/Index", },
-            
-        }
-    });
 
-    menuItems.Add(new
-    {
-        text = "Exercises",
-        items = new List<object>()
+        }
+        });
+
+        menuItems.Add(new
+        {
+            text = "Exercises",
+            items = new List<object>()
         {
             new { text = "Add", url = "/Exercises/AddOrEdit", },
             new { text = "List", url = "/Exercises/Index", },
 
         }
-    });
+        });
 
-    menuItems.Add(new
-    {
-        text = "Workouts",
-        items = new List<object>()
+        menuItems.Add(new
+        {
+            text = "Workouts",
+            items = new List<object>()
         {
             new { text = "Add", url = "/Workouts/AddOrEdit", },
             new { text = "List", url = "/Workouts/Index", },
 
         }
-    });
+        });
 
-    menuItems.Add(new
-    {
-        text = "ExRecords",
-        items = new List<object>()
+        menuItems.Add(new
+        {
+            text = "ExRecords",
+            items = new List<object>()
         {
             new { text = "Add", url = "/ExerciseRecords/Create", },
             new { text = "List", url = "/ExerciseRecords/Index", },
 
         }
-    });
+        });
+    }
+    else
+    {
+        menuItems.Add(new
+        {
+            text = "Log In",
+        
+        });
+    }
 
-    
-
-}
 
 
-<ejs-sidebar id="sidepanel" width="250px">
+    }
+
+
+
+<ejs-sidebar id="sidepanel" width="250px" >
     <e-content-template>
         <ejs-menu id="menu" items="menuItems" orientation="Vertical" hamburgerMode="false">
 
@@ -72,3 +87,4 @@
     </e-content-template>
 
 </ejs-sidebar>
+    

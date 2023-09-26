@@ -1,13 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using NEWG.Models;
 using Syncfusion.EJ2.PivotView;
+using System.Security.Policy;
 using WebGym.Data;
 
 namespace WebGym.Controllers
 {
+    //Acces Only for logged users
+    [Authorize(Policy = "RequireLoggedIn")]
     public class PanelController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -36,12 +43,15 @@ namespace WebGym.Controllers
                .Where(y => y.Date >= startD30 && y.Date <= EndD).ToListAsync();
 
             //Total Weight lifted 
+            if (User.Identity.IsAuthenticated)
 
-            decimal totalWeightLifted = Workouts
-                  .SelectMany(w => w.ExerciseRecords)
-                  .Sum(rw => rw.TotalWeight ?? 0);
-            ViewBag.TotalWeight = totalWeightLifted;
-
+            {
+                decimal totalWeightLifted = Workouts
+                      .SelectMany(w => w.ExerciseRecords)
+                      .Sum(rw => rw.TotalWeight ?? 0);
+                ViewBag.TotalWeight = totalWeightLifted;
+            }
+            else return View();
             // Total days lifted
 
             int daysLifted = Workouts
@@ -69,27 +79,33 @@ namespace WebGym.Controllers
             //Charts control
             #region
             //Donut chart
-            ViewBag.categoryCounts = _context.exerciseRecords
-            .Include(er => er.Exercise)
-            .Include(er => er.Workout)
-            .Where(er => er.Exercise != null)       // Only existing exercises
-            .Where(er => er.Workout != null && er.Workout.Date >= startD7 && er.Workout.Date <= EndD) // Filtered last 7days
-            .GroupBy(er => er.Exercise.CategoryId)   // Group by CategotyId
-            .Select(g => new
+            if (User.Identity.IsAuthenticated)
             {
-                CategoryId = g.Key,
-                CategoryCount = g.Count(),
-                CategoryName = g.First().Exercise.Name,
+                ViewBag.categoryCounts = _context.exerciseRecords
+                .Include(er => er.Exercise)
+                .Include(er => er.Workout)
+                .Where(er => er.Exercise != null)       // Only existing exercises
+                .Where(er => er.Workout != null && er.Workout.Date >= startD7 && er.Workout.Date <= EndD) // Filtered last 7days
+                .GroupBy(er => er.Exercise.CategoryId)   // Group by CategotyId
+                .Select(g => new
+                {
+                    CategoryId = g.Key,
+                    CategoryCount = g.Count(),
+                    CategoryName = _context.Categories.FirstOrDefault(cat => cat.CategoryId == g.Key).Name
 
 
-            })
-            .ToList();
+                })
+                .ToList();
+            }
+            else
+                return View() ;
 
             foreach (var categoryCount in ViewBag.categoryCounts)
             {
                 var category = _context.Categories.Find(categoryCount.CategoryId); // Load Category for name
 
             }
+        
 
 
 
@@ -104,7 +120,7 @@ namespace WebGym.Controllers
             }).ToList();
 
 
-            // Array for 30 days
+            // Array for 30 days. For data day by day
             string[] last30d = Enumerable.Range(0, 30)
                 .Select(i => startD30.AddDays(i).ToString("dd-MMM"))
                 .ToArray();

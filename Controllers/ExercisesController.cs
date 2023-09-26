@@ -11,9 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using NEWG.Models;
 using WebGym.Data;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebGym.Controllers
 {
+    //Acces Only for logged users
+    [Authorize(Policy = "RequireLoggedIn")]
     public class ExercisesController : Controller
     {
         private readonly ApplicationDbContext _context;

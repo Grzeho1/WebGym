@@ -65,6 +65,20 @@ body {
         padding: 5px;
     }
 
+/*Button Login/register*/
+
+.button
+{
+    color:greenyellow;
+    text-decoration:none;
+    font-style:oblique
+}
+.button:hover
+{
+    color:inherit;
+    text-decoration:none;
+}
+
 /*Grid*/
 .e-grid {
     border: 0;
@@ -144,9 +158,10 @@ body {
 
 /*Sidepanel*/
 #sidepanel {
-    background-color: #1a222b;
+   background-color: #1a222b;
    border-right: 5px #808080;
    padding: 20px 20px;
+   
 }
 
 .TotalWeight {
@@ -207,16 +222,15 @@ body {
         box-sizing: border-box;
         width:200px;
         background:inherit;
-        font-size:larger;
-        margin-bottom:20px;
+        font-size:large;
+        margin-bottom:15px;
     }
 
         #menu .e-menu-item a 
         {
             width: 50%;
             color: greenyellow;
-            font-weight: 300;
-            
+            font-weight: 400;
             box-sizing: border-box;
             
         }
@@ -226,7 +240,7 @@ body {
             margin: 5px 5px;
             text-transform: uppercase;
             font-weight: bold;
-            font-size: 19px;
+            font-size: 20px;
             color: #65da41;
            
         }
