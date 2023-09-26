@@ -9,9 +9,12 @@ using NEWG.Models;
 using WebGym.Data;
 using Microsoft.IdentityModel;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebGym.Controllers
 {
+    //Acces Only for logged users
+    [Authorize(Policy = "RequireLoggedIn")]
     public class WorkoutsController : Controller
          
     {
