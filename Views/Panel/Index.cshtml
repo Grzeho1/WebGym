@@ -1,23 +1,30 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
+   
     ViewData["isPanel"]=true;
+    var data = new string[] { "7Days", "30Days","365Days" };
 }
 
     @*Main content widget *@
 
 <div class="row mb-8">
-
-    
     <div class="col-md-4">
         <div class="d-flex flex-row widget TotalWeight">
             <div class="d-flex flex-column justify-content-center p-5">
                 <i class="bi bi-ev-station-fill"></i>
             </div>
-            <div class="d-flex flex-column m-auto py-3">
-                <span class="lead">Weight lifted 7 days</span>
-                <h1 class="display-6 fw-bold">@ViewBag.TotalWeight kg</h1>
+            <div  class="d-flex flex-column m-auto py-3">
+                <span class="lead">Weight by days</span>
+                <h1 id="totalWeight" class="display-6 fw-bold">
+                    @if (ViewData["SelectedRange"] == "7Days")
+                    {
+                        <text>Weight lifted 7 days</text>
+                    }
+                    else if (ViewData["SelectedRange"] == "30Days")
+                    {
+                        <text>Total Weight lifted 30 days</text>
+                    } 
+                </h1>
             </div>
         </div>
     </div>
@@ -29,7 +36,16 @@
             </div>
             <div class="d-flex flex-column m-auto py-3">
                 <span class="lead">Days lifted 7 days</span>
-                <h1 class="display-6 fw-bold">@ViewBag.daysLifted</h1>
+                <h1 id="daysLifted" class="display-6 fw-bold">
+                    @if (ViewData["SelectedRange"] == "7Days")
+                    {
+                        <text>Weight lifted 7 days</text>
+                    }
+                    else if (ViewData["SelectedRange"] == "30Days")
+                    {
+                        <text>Total Weight lifted 30 days</text>
+                    }
+                </h1>
             </div>
         </div>
     </div>
@@ -50,6 +66,14 @@
 
 
 <br />
+<div> 
+    <ejs-dropdownlist id="dateRange" dataSource="data" change="onDateRangeChange">
+        <e-dropdownlist-fields >
+            
+        </e-dropdownlist-fields>
+
+    </ejs-dropdownlist>
+</div>
 <br />
 
    
@@ -62,9 +86,10 @@
             <div class="p-4">
                 <h5 class="fw-bold">By Category</h5>
             </div>
+            <div>
             <ejs-accumulationchart id="donut" enableSmartLabels background="#1a222b">
                 <e-accumulation-series-collection>
-                    <e-accumulation-series dataSource="@ViewBag.categoryCounts" xName="CategoryName" yName="CategoryCount"
+                        <e-accumulation-series dataSource="@ViewBag.categoryCounts" xName="CategoryName" yName="CategoryCount"
                                            innerRadius="40%" legendShape="Circle"
                                            palettes=@(new string[]{"#0e8d76","#a4b219","#cb9b00","#8a442c","#0454b5","#7d0a0a","#822690","#4c2090","#313e93","#0096ac"})>
                         
@@ -74,7 +99,8 @@
                     <e-legendsettings-textstyle color="#fff" size="1rem"></e-legendsettings-textstyle>
                 </e-accumulationchart-legendsettings>
                 <e-accumulationchart-tooltipsettings enable></e-accumulationchart-tooltipsettings>
-            </ejs-accumulationchart>
+                </ejs-accumulationchart>
+            </div>
         </div>
     </div>
 
@@ -119,7 +145,7 @@
     <div class="col-md-4">
         <div class="widget chart">
             <div class="p-4">
-                <h5 class="fw-bold">Average by category</h5>
+                <h5 class="fw-bold">Average by part</h5>
             </div>
             <ejs-chart id="container" width="100%" palettes="@(new string[]{"#54ffa9","#ffe91a"})">
                 <e-chart-primaryxaxis valueType="Category"></e-chart-primaryxaxis>
@@ -142,7 +168,74 @@
 </div>
 
 
+<div>
+    <div class="widget chart">
+        <div class="p-8">
+            <h5 class="fw-bold">Weight Last 30 days</h5>
+        </div>
+        <ejs-chart id="spline-chart2" background="#1a222b"
+                   palettes=@(new string[]{"#54ffa9","#ffe91a"})>
+            <e-chart-primaryxaxis valueType="Category">
+                <e-majorgridlines width="0"></e-majorgridlines>
+                <e-majorticklines width="0"></e-majorticklines>
+            </e-chart-primaryxaxis>
+            <e-chart-primaryyaxis>
+                <e-majorgridlines width="1" color="#32414d" dashArray="3,5"></e-majorgridlines>
+                <e-majorticklines width="0"></e-majorticklines>
+                <e-linestyle width="1"></e-linestyle>
+            </e-chart-primaryyaxis>
+            <e-chart-chartarea>
+                <e-chartarea-border width="0"></e-chartarea-border>
+            </e-chart-chartarea>
+            <e-series-collection>
+                <e-series dataSource="@ViewBag.LineData" xName="day" width="3"
+                          yName="totalWeightByDay" name="Weight" type="@Syncfusion.EJ2.Charts.ChartSeriesType.Spline" splineType="@Syncfusion.EJ2.Charts.SplineType.Monotonic"></e-series>
+            </e-series-collection>
+            
+            
+           
+            <e-chart-legendsettings position="Top" alignment="Far" toggleVisibility="false">
+                <e-legendsettings-textstyle color="#fff" size="1rem"></e-legendsettings-textstyle>
+            </e-chart-legendsettings>
+            <e-chart-tooltipsettings enable shared></e-chart-tooltipsettings>
+        </ejs-chart>
+    </div>
+</div>
 
 
-@* Drag and Drop*@
 
+<script>
+    function onDateRangeChange(args) {
+        var selectedValue = args.itemData.value;
+        updateData(selectedValue);
+    }
+
+    function updateData(selectedValue) {
+        $.ajax({
+            url: '@Url.Action("GetData", "Panel")',
+            type: 'GET',
+            data: { selectedValue: selectedValue }, 
+            dataType: 'json',
+            success: function (data) {
+               console.log(data)
+                $('#totalWeight').text(data.totalWeight);
+                $('#daysLifted').text(data.daysLifted);
+
+              
+               
+               
+            },
+            error: function (error) {
+                console.error('Chyba při aktualizaci dat:', error);
+            }
+        });
+    }
+
+  
+
+    $(document).ready(function () {
+        // Při načtení stránky inicializujeme hodnotu na "7Days"
+        updateData("7Days");
+       
+    });
+</script>

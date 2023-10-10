@@ -83,11 +83,14 @@ body {
 .e-grid {
     border: 0;
     border-radius: 5px;
+    
 }
 
     .e-grid .e-gridcontent, .e-grid .e-table {
         background-color: #1a222b;
+        
     }
+   
 
     .e-grid .e-gridheader {
         border: 5px;
