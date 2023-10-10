@@ -25,9 +25,13 @@ namespace WebGym.Controllers
 
         public async Task<ActionResult> Index()
         {
+            
             DateTime startD7 = DateTime.Today.AddDays(-6);  // last 7 Days
             DateTime startD30 = DateTime.Today.AddDays(-30);  // Last 30 Days
             DateTime EndD = DateTime.Today;
+
+           
+
             //Sum 7days
             //List of Workouts ïn last 7 days
             #region
@@ -41,6 +45,8 @@ namespace WebGym.Controllers
             List<Workout> Workouts30 = await _context.Workouts
                .Include(w => w.ExerciseRecords)
                .Where(y => y.Date >= startD30 && y.Date <= EndD).ToListAsync();
+
+            
 
             //Total Weight lifted 
             if (User.Identity.IsAuthenticated)
@@ -98,14 +104,14 @@ namespace WebGym.Controllers
                 .ToList();
             }
             else
-                return View() ;
+                return View();
 
             foreach (var categoryCount in ViewBag.categoryCounts)
             {
                 var category = _context.Categories.Find(categoryCount.CategoryId); // Load Category for name
 
             }
-        
+
 
 
 
@@ -131,7 +137,12 @@ namespace WebGym.Controllers
                                from totalWeightByDay in JoinedDay.DefaultIfEmpty()
                                select new { day, totalWeightByDay = totalWeightByDay == null ? 0 : totalWeightByDay.totalWeightByDay };
 
-            // ViewBag for candlechart
+            // ViewBag for Line Chart 2
+
+            
+
+
+
             #region
             // Average weight lifted by category 
 
@@ -140,7 +151,7 @@ namespace WebGym.Controllers
             .Include(er => er.Workout)
             .Where(er => er.Exercise != null)  // Only existing exercises
             .Where(er => er.Workout != null && er.Workout.Date >= startD30 && er.Workout.Date <= EndD) // Filtered last 30 days
-            .GroupBy(er => er.Exercise.CategoryId) // Group by CategoryId
+            .GroupBy(er => er.Exercise.ExerciseId) // Group by ExId
             .Select(g => new
             {
                 CategoryId = g.Key,
@@ -152,18 +163,97 @@ namespace WebGym.Controllers
             
             ViewBag.CategoryAverages = categoryAverages;
             #endregion
-
+           
             #endregion 
             return View();
 
-            
+
+        }
+
+        // Get data by choosen range  ***(JS)***
+        [HttpGet]
+        public IActionResult GetData(string selectedValue)
+        {
+            DateTime startDate;
+            DateTime endDate = DateTime.Today;
+
+            switch (selectedValue)
+            {
+                case "7Days":
+                    startDate = endDate.AddDays(-6);
+                    break;
+                case "30Days":
+                    startDate = endDate.AddDays(-29);
+                    break;
+                case "365Days":
+                    startDate = endDate.AddDays(-360);
+                    break;
+                default:
+                    startDate = endDate;
+                    break;
+            }
+
+            // DropDown list data 7/30 days  Dynamic
+
+            var categoryCounts = _context.exerciseRecords
+                .Include(er => er.Exercise)
+                .Include(er => er.Workout)
+                .Where(er => er.Exercise != null)       // Only existing exercises
+                .Where(er => er.Workout != null && er.Workout.Date >= startDate && er.Workout.Date <= endDate) // Filtered last 7days
+                .GroupBy(er => er.Exercise.CategoryId)   // Group by CategotyId
+                .Select(g => new
+                {
+                    CategoryId = g.Key,
+                    CategoryCount = g.Count(),
+                    CategoryName = _context.Categories.FirstOrDefault(cat => cat.CategoryId == g.Key).Name
+
+
+                })
+                .ToList();
+
+         
+                
+
+                var workouts = _context.Workouts
+               .Include(w => w.ExerciseRecords)
+               .Where(y => y.Date >= startDate && y.Date <= endDate)
+               .ToList();
+
+            // Total Weight
+                decimal totalWeight = workouts
+                    .SelectMany(w => w.ExerciseRecords)
+                    .Sum(rw => rw.TotalWeight ?? 0);
+
+            // Days lifted
+                int daysLifted = workouts
+                    .Select(w => w.Date.Date)
+                    .Distinct()
+                    .Count();
+
+
+            // Data for View
+
+                var data = new
+                {
+                    totalWeight = totalWeight +  "kg",
+                    daysLifted = daysLifted,
+                    categoryCounts = categoryCounts,
+                  
+                };
+
+
+                return Json(data);
         }
     }
+
+  
 
     // Class for linechart
     public class LineData
     {
         public string? day;
         public decimal totalWeightByDay;
+       
+        
     }
 }

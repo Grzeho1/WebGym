@@ -21,8 +21,12 @@
 </head>
 
 <body class="e-bigger">
+    @*If user is logged, show sidePanel else hide*@
+    @{ if(User.Identity.IsAuthenticated)
+    {
     <partial name="_SidePanel" />
-
+    }
+    }
     @*Header *@
 
     <header>
@@ -77,13 +81,16 @@
                                    @* <ejs-breadcrumb id="breadcrumb"></ejs-breadcrumb>*@
                                 </div>
                             </div>
+                                
                         </div>
                     }
                     @RenderBody()
+                        
             </main>
-        </div>
+         </div>
         </div>
     </div>
+       
     </div>
 
     @*Footer *@
